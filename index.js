@@ -2,90 +2,162 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 var fs = require('fs');
 
-var data = fs.readFileSync('html/1.html', 'utf-8');
+// var data = fs.readFileSync('html/1.html', 'utf-8');
 
-var $ = cheerio.load(data);
+// var $ = cheerio.load(data);
+
+// var totalData = new Array();
+
+// var rank = [];
+// var overallScore = [];
+// var graphicsScore = [];
+// var physicsScore = [];
+// var cpu = [];
+// var gpu = [];
+// var maxClock = [];
+// var coreClock = [];
+// var memClock = [];
+// var user = [];
+// var date  = [];
+
+
+// $('.rank').each(function(){
+//     rank.push($(this).text());
+// })
+
+// $('.overallScore').each(function(){
+//     overallScore.push($(this).text());
+// })
+
+// $('.graphicsScore').each(function(){
+//     graphicsScore.push($(this).text());
+// })
+
+// $('.physicsScore').each(function(){
+//     physicsScore.push($(this).text());
+// })
+
+// $('.cpu').each(function(){
+//     cpu.push($(this).text());
+// })
+
+// $('.gpu').each(function(){
+//     gpu.push($(this).text());
+// })
+
+// $('.maxClock').each(function(){
+//     maxClock.push($(this).text());
+// })
+
+// $('.coreClock').each(function(){
+//     coreClock.push($(this).text());
+// })
+
+// $('.memClock').each(function(){
+//     memClock.push($(this).text());
+// })
+
+// $('.user').each(function(){
+//     user.push($(this).text());
+// })
+
+// $('.date').each(function(){
+//     date.push($(this).text());
+// })
+
+//------------------------------------------
+
+filesLength = 3; // 파일 추가될때마다 직접 지정해줘야 함
 
 var totalData = new Array();
 
-var rank = [];
-var overallScore = [];
-var graphicsScore = [];
-var physicsScore = [];
-var cpu = [];
-var gpu = [];
-var maxClock = [];
-var coreClock = [];
-var memClock = [];
-var user = [];
-var date  = [];
+fileNumTemp = 1;
 
+for(var fileNum = 1; fileNum <= filesLength; fileNum++) {
+    var data = fs.readFileSync('html/' + fileNum + '.html', 'utf-8');
 
-$('.rank').each(function(){
-    rank.push($(this).text());
-})
+    var $ = cheerio.load(data);
 
-$('.overallScore').each(function(){
-    overallScore.push($(this).text());
-})
+    var rank = [];
+    var overallScore = [];
+    var graphicsScore = [];
+    var physicsScore = [];
+    var cpu = [];
+    var gpu = [];
+    var maxClock = [];
+    var coreClock = [];
+    var memClock = [];
+    var user = [];
+    var date  = [];
 
-$('.graphicsScore').each(function(){
-    graphicsScore.push($(this).text());
-})
+    $('.rank').each(function(){
+        rank.push($(this).text());
+    });
 
-$('.physicsScore').each(function(){
-    physicsScore.push($(this).text());
-})
+    $('.overallScore').each(function(){
+        overallScore.push($(this).text());
+    });
 
-$('.cpu').each(function(){
-    cpu.push($(this).text());
-})
+    $('.graphicsScore').each(function(){
+        graphicsScore.push($(this).text());
+    });
 
-$('.gpu').each(function(){
-    gpu.push($(this).text());
-})
+    $('.physicsScore').each(function(){
+        physicsScore.push($(this).text());
+    });
 
-$('.maxClock').each(function(){
-    maxClock.push($(this).text());
-})
+    $('.cpu').each(function(){
+        cpu.push($(this).text());
+    });
 
-$('.coreClock').each(function(){
-    coreClock.push($(this).text());
-})
+    $('.gpu').each(function(){
+        gpu.push($(this).text());
+    });
 
-$('.memClock').each(function(){
-    memClock.push($(this).text());
-})
+    $('.maxClock').each(function(){
+        maxClock.push($(this).text());
+    });
 
-$('.user').each(function(){
-    user.push($(this).text());
-})
+    $('.coreClock').each(function(){
+        coreClock.push($(this).text());
+    });
 
-$('.date').each(function(){
-    date.push($(this).text());
-})
+    $('.memClock').each(function(){
+        memClock.push($(this).text());
+    });
 
-for (var i = 0; i < 100; i++) {
-    var temp = new Object();
-    
-    temp.rank = (rank[i]);
-    temp.overallScore = (overallScore[i]);
-    temp.graphicsScore = (graphicsScore[i]);
-    temp.physicsScore = (physicsScore[i]);
-    temp.cpu = (cpu[i]);
-    temp.gpu = (gpu[i]);
-    temp.maxClock = (maxClock[i]);
-    temp.coreClock = (coreClock[i]);
-    temp.memClock = (memClock[i]);
-    temp.user = (user[i].replace("," , ""));
-    temp.date = (date[i]);
-    
-    totalData.push(temp);
+    $('.user').each(function(){
+        user.push($(this).text());
+    });
+
+    $('.date').each(function(){
+        date.push($(this).text());
+    });
+
+    for (var i = 0; i < rank.length; i++) {
+        var temp = new Object();
+        
+        temp.num = (fileNumTemp);
+        temp.rank = (rank[i]);
+        temp.overallScore = (overallScore[i]);
+        temp.graphicsScore = (graphicsScore[i]);
+        temp.physicsScore = (physicsScore[i]);
+        temp.cpu = (cpu[i]);
+        temp.gpu = (gpu[i]);
+        temp.maxClock = (maxClock[i]);
+        temp.coreClock = (coreClock[i]);
+        temp.memClock = (memClock[i]);
+        temp.user = (user[i].toString().replace("," , ""));
+        temp.date = (date[i]);
+        
+        totalData.push(temp);
+        fileNumTemp += 1
+        console.log(temp);
+    }
+
 }
 
 const csv_string = jsonToCSV(totalData);
-
-console.log(csv_string);
 
 fs.writeFileSync('data.csv', csv_string);
 
