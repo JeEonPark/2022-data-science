@@ -67,7 +67,7 @@ var fs = require('fs');
 
 //------------------------------------------
 
-filesLength = 3; // 파일 추가될때마다 직접 지정해줘야 함
+filesLength = 33; // 파일 추가될때마다 직접 지정해줘야 함
 
 var totalData = new Array();
 
@@ -200,4 +200,4 @@ function jsonToCSV(json_data) {
 
     // 6. CSV 문자열 반환: 최종 결과물(string)
     return '\ufeff' + csv_string;
-}
+}   
